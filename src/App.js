@@ -1,24 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import ListaExpandible from "./ListaExpandible";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <body>
+      <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+        <div className="container-fluid">
+          <a className="navbar-brand" href="#">My Progress</a>
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="#navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarResponsive">
+            <ul className="navbar-nav me-auto">
+              <li className="nav-item">
+                <a className="nav-link" href="#">Entrenamiento de Hoy</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#">Calendario</a>
+              </li>
+              <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Opciones</a>
+                <div className="dropdown-menu">
+                  <a className="dropdown-item" href="#">Action</a>
+                  <a className="dropdown-item" href="#">Another action</a>
+                  <a className="dropdown-item" href="#">Something else here</a>
+                  <div className="dropdown-divider"></div>
+                  <a className="dropdown-item" href="#">Separated link</a>
+                </div>
+              </li>
+            </ul>
+            <form className="d-flex">
+              <input className="form-control me-sm-2" type="search" placeholder="Search"></input>
+              <button className="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+
+      <div>
+        <ListaExpandible>
+          
+        </ListaExpandible>
+      </div>
+    </body>
   );
 }
 
