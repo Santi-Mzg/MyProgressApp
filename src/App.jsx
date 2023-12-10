@@ -9,6 +9,7 @@ function App() {
     <Routes>
         <Route path="/calendar" element={<CalendarPage/>}/>
         <Route path="/:fecha" element={<BlockList/>} />
+        <Route path="/" element={<BlockList/>} />
     </Routes>
     </BrowserRouter>
   )
