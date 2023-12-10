@@ -2,16 +2,19 @@ import React, { useEffect, useState } from 'react';
 import BotonExpandible from "./BotonExpandible";
 import Block from './Block';
 import Toolbar from './Toolbar';
+import { useParams } from 'react-router-dom';
 
 export default function BlockList() {
+    const { fecha } = useParams();
+
     const [blockList, setBlockList] = useState(() => {
-        const localValue = localStorage.getItem("BLOCKLIST")
+        const localValue = localStorage.getItem("BLOCKLIST"+fecha)
         if(localValue == null) return []
         return JSON.parse(localValue)
     });
 
     useEffect(() => {
-        localStorage.setItem("BLOCKLIST", JSON.stringify(blockList))
+        localStorage.setItem("BLOCKLIST"+fecha, JSON.stringify(blockList))
     }, [blockList])
 
     const addBlock = (nroSeries) => {
