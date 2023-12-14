@@ -5,42 +5,17 @@ import { exerciseDataBase } from './Exercises';
 export default function Block( {series, index, id} ) {
 
    const [exerciseList, setExerciseList] = useState(() => {
-        const localValue = localStorage.getItem("BLOCK"+id)
+        const localValue = localStorage.getItem(id)
         if(localValue == null) return []
         return JSON.parse(localValue)
     });
 
     useEffect(() => {
-        localStorage.setItem("BLOCK"+id, JSON.stringify(exerciseList))
+        localStorage.setItem(id, JSON.stringify(exerciseList))
     }, [exerciseList])
-/*
-    const handstand = {
-        name: "Handstand",
-        isometric: true,
-        weighted: false,
-    }
 
-    const flexiones = {
-        name: "Flexiones",
-        isometric: false,
-        weighted: true,
-    }
-
-    const dominadas = {
-        name: "Dominadas",
-        isometric: false,
-        weighted: true,
-    }
-
-    const l_sit = {
-        name: "L-sit",
-        isometric: true,
-        weighted: false,
-    }
-*/
-    //const [exerciseDataBase, setExerciseDataBase] = useState([handstand, flexiones, dominadas, l_sit]);
-    const [arrayReps, setArrayReps] = useState([1,2,3,4,5,6,7,8,9,10,12,15,18,20,25,30]);
-    const [arrayTime, setArrayTime] = useState([15, 30, 60, 90, 120]);
+    const [arrayReps, setArrayReps] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 20, 25, 30, "Max"]);
+    const [arrayTime, setArrayTime] = useState([15, 30, 60, 90, 120, "Max"]);
     const [arrayWeights, setArrayWeights] = useState(["Libre", 2.5, 5, 7.5, 10, 12, 15, 17.5, 20, 22.5, 25, 37.5, 30, 35, 40, 45, 50]);
 
     const addExercise = (exercise) => {
@@ -78,10 +53,7 @@ export default function Block( {series, index, id} ) {
         <>
         {series + " x { "}
         <ul className="list">
-            
             {exerciseList.length === 0}
-            {console.log("length: "+exerciseList.length)}
-            {console.log(exerciseList)}
             {exerciseList.map((exercise, exerciseIndex) => {    
                 return (
                     <li key={exercise.id}>
@@ -92,7 +64,8 @@ export default function Block( {series, index, id} ) {
                                 {'\u00A0'+exercise.name}
                             </>} 
 
-                            {exercise.volume !== 0 && (exercise.volume + (exercise.isometric && "s " || " x ") + exercise.name)}
+                            {exercise.volume !== 0 && exercise.volume !== "Max" && (exercise.volume + (exercise.isometric && "s " || " x ") + exercise.name)}
+                            {exercise.volume === "Max" && (exercise.volume + " " + exercise.name)}
                             {'\u00A0'}  
 
                             {exercise.weighted && exercise.weight === null &&

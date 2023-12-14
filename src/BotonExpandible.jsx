@@ -9,7 +9,6 @@ function BotonExpandible({ supIndex, onClick, arrayContent, text}) {
   };
   
   const onClickLocal = (elem, index) => {
-    console.log(elem +" "+ index);
     onClick(elem, index);
     setExpanded(false);
   }

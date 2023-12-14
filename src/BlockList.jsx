@@ -8,13 +8,20 @@ export default function BlockList() {
     const { fecha } = useParams();
 
     const [blockList, setBlockList] = useState(() => {
-        const localValue = localStorage.getItem("BLOCKLIST"+fecha)
-        if(localValue == null) return []
-        return JSON.parse(localValue)
+        const localValue = localStorage.getItem(fecha)
+        return localValue ? JSON.parse(localValue) : []
     });
 
     useEffect(() => {
-        localStorage.setItem("BLOCKLIST"+fecha, JSON.stringify(blockList))
+        // La función del estado se ejecutará cada vez que cambie la fecha
+        setBlockList(() => {
+          const localValue = localStorage.getItem(fecha)
+          return localValue ? JSON.parse(localValue) : []
+        });
+      }, [fecha]);
+
+    useEffect(() => {
+        localStorage.setItem(fecha, JSON.stringify(blockList))
     }, [blockList])
 
     const addBlock = (nroSeries) => {
