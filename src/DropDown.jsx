@@ -1,17 +1,33 @@
+import React, { useState } from 'react';
 
+function DropDown({ supIndex, onClick, options, text}) {
+  const [expanded, setExpanded] = useState(false);
 
-export default function Dropdown( {onClick} ) {
+  const toggleExpanded = () => {
+    setExpanded(!expanded);
+  };
+  
+  const onClickLocal = (elem, index) => {
+    onClick(elem, index);
+    setExpanded(false);
+  }
 
-    return (
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle show" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true">Dropdown</a>
-            <div class="dropdown-menu show" style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate3d(0px, 42.4px, 0px);" data-popper-placement="bottom-start">
-                <a class="dropdown-item" href="#" onClick={onClick}>Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Separated link</a>
-            </div>
-        </li>
-    )
+  return (
+    <div className="nav-item dropdown">
+      <button className="nav-link dropdown-toggle show" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="true" onClick={toggleExpanded} >{text}</button>
+      {expanded && (
+        <ul className="boton-expandible-lista" style={{zIndex: 1}}>
+          {options.map((elem, index) => {
+            return (
+              <div className="btn-group-vertical" key={index}>
+                <button  type="button" className="dropdown-item" onClick={() => onClickLocal(elem, supIndex)}>{elem.name || elem}</button>
+              </div>
+            )
+          })}
+        </ul>
+      )}
+    </div>
+  );
 }
+
+export default DropDown;

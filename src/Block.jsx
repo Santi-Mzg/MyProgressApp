@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import BotonExpandible from "./BotonExpandible";
-import { exerciseDataBase } from './Exercises';
+import DropDown from "./DropDown";
+import DropDownWithSearch from "./DropDownWithSearch";
+import { exercises } from './Exercises';
 
 export default function Block( {series, index, id} ) {
 
@@ -21,7 +22,7 @@ export default function Block( {series, index, id} ) {
     const addExercise = (exercise) => {
         const newExercise = {
             id: crypto.randomUUID(),
-            name: exercise.name,
+            label: exercise.label,
             isometric: exercise.isometric,
             weighted: exercise.weighted,
             weight: null, // Que todavia no se definió, libre es 0
@@ -31,21 +32,21 @@ export default function Block( {series, index, id} ) {
     };
     
     const addRepetitions = (repetitions, index) => {
-        const updatedExercises = [...exerciseList];
+        const updatedExercise = [...exerciseList];
         exerciseList[index].volume = repetitions;
-        setExerciseList(updatedExercises);
+        setExerciseList(updatedExercise);
     };
 
     const addWeight = (weight, index) => {
-        const updatedExercises = [...exerciseList];
+        const updatedExercise = [...exerciseList];
         exerciseList[index].weight = weight;
-        setExerciseList(updatedExercises);
+        setExerciseList(updatedExercise);
     };
 
     const deleteExercise= (index) => {
-        const updatedExercises = [...exerciseList];
-        updatedExercises.splice(index, 1);
-        setExerciseList(updatedExercises);
+        const updatedExercise = [...exerciseList];
+        updatedExercise.splice(index, 1);
+        setExerciseList(updatedExercise);
     };
 
 
@@ -56,21 +57,21 @@ export default function Block( {series, index, id} ) {
             {exerciseList.length === 0}
             {exerciseList.map((exercise, exerciseIndex) => {    
                 return (
-                    <li key={exercise.id}>
+                    <li key={exercise.id} style={{ marginBottom: '5px' }}>
                         <div className="btn-group">
                             {exercise.volume === 0 && 
                             <>
-                                <BotonExpandible supIndex={exerciseIndex} onClick={addRepetitions} arrayContent={exercise.isometric && arrayTime || arrayReps} text="*"/>
-                                {'\u00A0'+exercise.name}
+                                <DropDown supIndex={exerciseIndex} onClick={addRepetitions} options={exercise.isometric && arrayTime || arrayReps} text="*"/>
+                                {'\u00A0'+exercise.label}
                             </>} 
 
-                            {exercise.volume !== 0 && exercise.volume !== "Max" && (exercise.volume + (exercise.isometric && "s " || " x ") + exercise.name)}
-                            {exercise.volume === "Max" && (exercise.volume + " " + exercise.name)}
+                            {exercise.volume !== 0 && exercise.volume !== "Max" && (exercise.volume + (exercise.isometric && "s " || " x ") + exercise.label)}
+                            {exercise.volume === "Max" && (exercise.volume + " " + exercise.label)}
                             {'\u00A0'}  
 
                             {exercise.weighted && exercise.weight === null &&
                             <>
-                                <BotonExpandible supIndex={exerciseIndex} onClick={addWeight} arrayContent={exercise.weighted && arrayWeights} text="Lastre"/>
+                                <DropDown supIndex={exerciseIndex} onClick={addWeight} options={exercise.weighted && arrayWeights} text="Lastre"/>
                             </>
                             || exercise.weighted && exercise.weight == "Libre" && (exercise.weight) 
                             || exercise.weighted && exercise.weight !== 0 && ("con " + exercise.weight + " kg")}
@@ -82,7 +83,7 @@ export default function Block( {series, index, id} ) {
                     </li>
                 )
             })}
-            <BotonExpandible supIndex={index} onClick={addExercise} arrayContent={exerciseDataBase} text="+"/>
+            <DropDownWithSearch onChange={addExercise} options={exercises}/>
         </ul>
         </>
     )
