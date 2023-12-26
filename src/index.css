@@ -73,6 +73,42 @@ button:focus-visible {
   }
 }
 
+.section-parent {
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
+}
+
+.section-routine {
+  width: 50vh;
+  height: 100vh;
+  display: flex;
+  flex: 2;
+  flex-flow: column nowrap;
+  overflow-y: auto;
+  align-items: center;
+}
+
+.section-calendar {
+  width: 50vh;
+  height: 100vh;
+  display: flex;
+  flex: 2 ;
+  flex-flow: column nowrap; 
+  position: relative;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.section-buttons {
+  height: 100vh;
+  display: flex;
+  flex: 1;
+  flex-flow: column nowrap; 
+  justify-content: space-around;
+}
+
 .boton-expandible-lista {
   position: absolute;
   top: 100%;

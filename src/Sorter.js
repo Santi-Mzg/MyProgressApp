@@ -10,7 +10,7 @@ if (Array.isArray(jsonData.exercises)) {
   jsonData.exercises.sort((a, b) => a.label.localeCompare(b.label));
 
   // Guarda el objeto con el array ordenado en lugar del no ordenado
-  fs.writeFileSync('sortedexercises.json', JSON.stringify(jsonData, null, 2), 'utf-8');
+  fs.writeFileSync('exercises.json', JSON.stringify(jsonData, null, 2), 'utf-8');
 
   console.log('JSON ordenado alfabéticamente por el atributo "label" y guardado en public/data.json');
 } else {

@@ -3,7 +3,7 @@ import DropDown from "./DropDown";
 import DropDownWithSearch from "./DropDownWithSearch";
 import { exercises } from './Exercises';
 
-export default function Block( {series, index, id} ) {
+export default function Block( {series, id, modificable} ) {
 
    const [exerciseList, setExerciseList] = useState(() => {
         const localValue = localStorage.getItem(id)
@@ -17,7 +17,7 @@ export default function Block( {series, index, id} ) {
 
     const [arrayReps, setArrayReps] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 18, 20, 25, 30, "Max"]);
     const [arrayTime, setArrayTime] = useState([15, 30, 60, 90, 120, "Max"]);
-    const [arrayWeights, setArrayWeights] = useState(["Libre", 2.5, 5, 7.5, 10, 12, 15, 17.5, 20, 22.5, 25, 37.5, 30, 35, 40, 45, 50]);
+    const [arrayWeights, setArrayWeights] = useState(["Libre", "Banda", 2.5, 5, 7.5, 10, 12, 15, 17.5, 20, 22.5, 25, 37.5, 30, 35, 40, 45, 50]);
 
     const addExercise = (exercise) => {
         const newExercise = {
@@ -54,36 +54,33 @@ export default function Block( {series, index, id} ) {
         <>
         {series + " x { "}
         <ul className="list">
-            {exerciseList.length === 0}
             {exerciseList.map((exercise, exerciseIndex) => {    
                 return (
                     <li key={exercise.id} style={{ marginBottom: '5px' }}>
-                        <div className="btn-group">
-                            {exercise.volume === 0 && 
-                            <>
-                                <DropDown supIndex={exerciseIndex} onClick={addRepetitions} options={exercise.isometric && arrayTime || arrayReps} text="*"/>
-                                {'\u00A0'+exercise.label}
-                            </>} 
+                        <div class="btn-group"> 
+                            <DropDown modificable={modificable} supIndex={exerciseIndex} onClick={addRepetitions} options={exercise.isometric && arrayTime || arrayReps} 
+                                text={exercise.volume === 0 && "*" || 
+                                      exercise.isometric && exercise.volume !== "Max" && (exercise.volume + "s") ||
+                                      (exercise.volume)}
+                            />
 
-                            {exercise.volume !== 0 && exercise.volume !== "Max" && (exercise.volume + (exercise.isometric && "s " || " x ") + exercise.label)}
-                            {exercise.volume === "Max" && (exercise.volume + " " + exercise.label)}
-                            {'\u00A0'}  
-
-                            {exercise.weighted && exercise.weight === null &&
-                            <>
-                                <DropDown supIndex={exerciseIndex} onClick={addWeight} options={exercise.weighted && arrayWeights} text="Lastre"/>
-                            </>
-                            || exercise.weighted && exercise.weight == "Libre" && (exercise.weight) 
-                            || exercise.weighted && exercise.weight !== 0 && ("con " + exercise.weight + " kg")}
+                            {'\u00A0'+exercise.label+'\u00A0'}
+                            {exercise.weighted &&
+                            <DropDown modificable={modificable} supIndex={exerciseIndex} onClick={addWeight} options={exercise.weighted && arrayWeights} 
+                                text={exercise.weight === null && "Lastre" ||
+                                      exercise.weight === "Libre" && exercise.weight ||
+                                      exercise.weight === "Banda" && ("con " + exercise.weight) ||
+                                      ("con " + exercise.weight + " kg")}
+                            />}
                             
                             {'\u00A0 \u00A0'}  
 
-                            <button className="btn btn-danger" onClick={() => deleteExercise(exerciseIndex)}>X</button>
+                            {modificable && <button className="btn btn-danger" onClick={() => deleteExercise(exerciseIndex)}>X</button>}
                         </div> 
                     </li>
                 )
             })}
-            <DropDownWithSearch onChange={addExercise} options={exercises}/>
+            {modificable && <DropDownWithSearch onChange={addExercise} options={exercises} text={"Agregar Ejercicio..."}/>}
         </ul>
         </>
     )

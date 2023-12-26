@@ -10,20 +10,6 @@ import { Link } from 'react-router-dom';
                 <Link to="/MyProgressApp/" className="navbar-brand">
                     My Progress
                 </Link>
-                <div className="collapse navbar-collapse" id="navbarResponsive">
-                    <ul className="navbar-nav me-auto">
-                        <li className="nav-item">
-                            <Link to={`/MyProgressApp/${formattedDate}`} className="nav-link active">
-                                Entrenamiento del día
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/MyProgressApp/calendar" className="nav-link">
-                                Calendario
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </nav>
     )

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 
-function DropDownWithSearch({ options, onChange}) {
+function DropDownWithSearch({ options, onChange, text}) {
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [searchText, setSearchText] = useState('');
@@ -39,7 +39,7 @@ function DropDownWithSearch({ options, onChange}) {
         options={filteredOptions}
         isSearchable
         onInputChange={value => setSearchText(value)}
-        placeholder="Agregar ejercicio..." 
+        placeholder={text}
         styles={customStyles}
       />
   );
