@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 
-function DropDown({ modificable, supIndex, onClick, options, text}) {
+function DropDown({ modificable, blockIndex, exerciseIndex, onClick, options, text}) {
   const [expanded, setExpanded] = useState(false);
 
   const toggleExpanded = () => {
     setExpanded(!expanded);
   };
   
-  const onClickLocal = (elem, index) => {
-    onClick(elem, index);
+  const onClickLocal = (blockIndex, index, elem) => {
+    onClick(blockIndex, index, elem);
     setExpanded(false);
   }
 
@@ -22,7 +22,7 @@ function DropDown({ modificable, supIndex, onClick, options, text}) {
           {options.map((elem, index) => {
             return (
               <div className="btn-group-vertical" key={index}>
-                <button  type="button" className="dropdown-item" onClick={() => onClickLocal(elem, supIndex)}>{elem}</button>
+                <button  type="button" className="dropdown-item" onClick={() => onClickLocal(blockIndex, exerciseIndex, elem)}>{elem}</button>
               </div>
             )
           })}

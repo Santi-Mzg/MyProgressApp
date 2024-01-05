@@ -1,11 +1,19 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
-import {createAccessToken} from '../libs/jwt.js';
+import { createAccessToken } from '../libs/jwt.js';
+import jwt from 'jsonwebtoken'
+import { TOKEN_SECRET } from '../config.js';
 
 export const register = async (req, res) => {
-    const {username, email, password} = req.body;
+    const { username, email, password } = req.body;
 
     try {
+        const userFoundbyEmail = await User.findOne({ email })
+        if (userFoundbyEmail) return res.status(400).json({ message: "El email ya se encuentra registrado" })
+
+        const userFoundByUsername = await User.findOne({ username })
+        if (userFoundByUsername) return res.status(400).json({ message: "Nombre de usuario no disponible" })
+
         const passwordHash = await bcrypt.hash(password, 10);
 
         const newUser = new User({
@@ -13,10 +21,10 @@ export const register = async (req, res) => {
             email,
             password: passwordHash,
         });
-    
-        const userSaved = await newUser.save(); 
-        const token = await createAccessToken({id: userSaved._id});
-        
+
+        const userSaved = await newUser.save();
+        const token = await createAccessToken({ id: userSaved._id });
+
         res.cookie("token", token);
         res.json({
             id: userSaved._id,
@@ -32,17 +40,17 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-    const {email, password} = req.body;
+    const { username, password } = req.body;
 
     try {
-        const userFound = await User.findOne({ email });
-        if(!userFound) return res.status(400).json({ message: "User not found" });
+        const userFound = await User.findOne({ username });
+        if (!userFound) return res.status(400).json({ message: "Usuario no encontrado" });
 
         const isMatch = await bcrypt.compare(password, userFound.password);
-        if(!isMatch) return res.status(400).json({ message: "Incorrect password" });
+        if (!isMatch) return res.status(400).json({ message: "Contraseña incorrecta" });
 
-        const token = await createAccessToken({id: userFound._id});
-        
+        const token = await createAccessToken({ id: userFound._id });
+
         res.cookie("token", token);
         res.json({
             id: userFound._id,
@@ -63,10 +71,12 @@ export const logout = (req, res) => {
 };
 
 export const profile = async (req, res) => {
-    const userFound = await User.findById(req.user.id);
-    if(!userFound) return res.send(400).json({ message: "User not found" });
+    console.log("profile")
 
-    return res.json({ 
+    const userFound = await User.findById(req.user.id);
+    if (!userFound) return res.send(400).json({ message: "Usuario no encontrado" });
+
+    return res.json({
         id: userFound._id,
         username: userFound.username,
         email: userFound.email,
@@ -74,3 +84,22 @@ export const profile = async (req, res) => {
         updatedAt: userFound.updatedAt,
     });
 };
+
+export const verifyToken = async (req, res) => {
+    const {token} = req.cookies
+    console.log("verifyToken")
+    if(!token) return res.status(401).json({message: "No autorizado"})
+
+    jwt.verify(token, TOKEN_SECRET, async (err, user) => {
+        if(err) return res.status(401).json({ message: "No autorizado" })
+
+        const userFound = await User.findById(user.id)
+        if(!userFound) return res.status(401).json({ message: "No autorizado" })
+
+        return res.json({
+            id: userFound._id,
+            username: userFound.username,
+            email: userFound.email,
+        })
+    })
+}

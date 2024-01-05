@@ -1,0 +1,15 @@
+import { Router } from 'express';
+import { authRequire } from '../middlewares/validateToken.js'
+import { getWorkout, createWorkout, updateWorkout, deleteWorkout } from '../controllers/workout.controller.js';
+import { validateSchema } from '../middlewares/validator.middleware.js';
+import { createWorkoutSchema } from '../schemas/workout.schema.js';
+
+
+const router = Router();
+
+router.get('/workout/:date', authRequire, getWorkout);
+router.post('/workout/', authRequire, validateSchema(createWorkoutSchema), createWorkout);
+router.put('/workout/:date', authRequire, updateWorkout);
+router.delete('/workout/:date', authRequire, deleteWorkout);
+
+export default router;
