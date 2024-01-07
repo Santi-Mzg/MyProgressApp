@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { registerRequest, loginRequest, verifyTokenRequest } from '../api/auth.js';
+import { registerRequest, loginRequest, logoutRequest, verifyTokenRequest } from '../api/auth.js';
 import Cookies from 'js-cookie'
 
 export const AuthContext = createContext()
@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
             setUser(res.data)
             setIsAuthenticated(true)
         } catch (error) {
-            console.log(error)
             if (Array.isArray(error.response.data))
                 setErrors(error.response.data)
             else
@@ -35,9 +34,28 @@ export const AuthProvider = ({ children }) => {
         try {
             const res = await loginRequest(user)
             setUser(res.data)
+            console.log("res.data: "+res.data)
             setIsAuthenticated(true)
         } catch (error) {
-            console.log(error)
+            if (Array.isArray(error.response.data)){
+                console.log("isArray")
+                setErrors(error.response.data)
+            }
+            else{
+                console.log("noArray")
+                setErrors([error.response.data.message])
+            }
+            console.log(errors)
+        }
+    }
+
+    const signout = async () => {
+        try {
+            const res = await logoutRequest()
+            Cookies.remove("token")
+            setUser(null)
+            setIsAuthenticated(false)
+        } catch (error) {
             if (Array.isArray(error.response.data)){
                 console.log("isArray")
                 setErrors(error.response.data)
@@ -95,6 +113,7 @@ export const AuthProvider = ({ children }) => {
             value={{
                 signup,
                 signin,
+                signout,
                 loading,
                 user,
                 isAuthenticated,

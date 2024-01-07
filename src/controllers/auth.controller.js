@@ -70,21 +70,6 @@ export const logout = (req, res) => {
     return res.sendStatus(200)
 };
 
-export const profile = async (req, res) => {
-    console.log("profile")
-
-    const userFound = await User.findById(req.user.id);
-    if (!userFound) return res.send(400).json({ message: "Usuario no encontrado" });
-
-    return res.json({
-        id: userFound._id,
-        username: userFound.username,
-        email: userFound.email,
-        createdAt: userFound.createdAt,
-        updatedAt: userFound.updatedAt,
-    });
-};
-
 export const verifyToken = async (req, res) => {
     const {token} = req.cookies
     console.log("verifyToken")

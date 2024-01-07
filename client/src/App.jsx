@@ -3,22 +3,26 @@ import RegisterPage from './pages/RegisterPage';
 import LoginPage from './pages/LoginPage';
 import MainPage from './pages/MainPage';
 import { AuthProvider } from './context/AuthContext';
+import { WorkoutProvider } from './context/WorkoutContext'
 import ProtectedRoute from './ProtectedRoute';
 
 function App() {
 
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/login" element={<LoginPage />} />
+      <WorkoutProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<LoginPage />} />
 
-            <Route path="/workout" element={<MainPage />} />
-            <Route path="/workout/:date" element={<MainPage />} />
-        
-        </Routes>
-      </BrowserRouter>
+            <Route element={<ProtectedRoute/>}>
+              <Route path="/workout" element={<MainPage />} />
+              <Route path="/workout/:date" element={<MainPage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </WorkoutProvider>
     </AuthProvider>
   )
 }
