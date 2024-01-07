@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import DropDown from "./DropDown";
-import DropDownWithSearch from "./DropDownWithSearch";
+import DropDown from "./DropDown.jsx";
+import DropDownWithSearch from "./DropDownWithSearch.jsx";
 import { exercises } from '../utils/exercises.json';
 import { arrayReps, arrayTime, arrayWeights } from '../utils/utils.js'
 
